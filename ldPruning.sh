@@ -8,14 +8,16 @@
 
 # Check if help is requested
 if [[ $1 = "-h" ]]; then
-        echo -e "\nUsage: ldPruning.sh <vcffile[.gz]> [optional: <LD threshold (R^2), default 0.1> <outputformat vcf/plink> <if 0/1 recoding requested, write TRUE>]"
+        echo -e "\nUsage: ldPruning.sh <vcffile[.gz]> [optional: <LD threshold (R^2), default 0.1> <outputformat vcf/plink> <if 0/1 recoding requested, write 01>]"
   exit 0
 fi
 
-# Read in the file name
+# Read in the file name (remove potential file endings given)
 file=$1
 file=${file%.gz}
 file=${file%.vcf}
+
+# Set default values
 thresh=0.1
 format="vcf"
 
@@ -41,7 +43,7 @@ fi
 if (( "$#" > 1 ))    
 then
         case $2 in
-	  TRUE)
+	  01)
 		r="01"
 		;;
 	  vcf)
@@ -59,7 +61,7 @@ fi
 if (( "$#" > 2 ))
 then
         case $3 in
-          TRUE)
+          01)
                 r="01"
                 ;;
           vcf)
@@ -77,7 +79,7 @@ fi
 if (( "$#" > 3 ))
 then
         case $4 in
-          TRUE)
+          01)
                 r="01"
                 ;;
           vcf)
@@ -96,20 +98,22 @@ fi
 if (( "$#" > 4 ))
 then
         echo "Error: Too many arguments provided"
-        echo -e "\nUsage: ldPruning.sh <vcffile> [optional: <LD threshold (R^2), default 0.1> <outputformat vcf/plink> <if 0/1 recoding requested, write TRUE>]"
+        echo -e "\nUsage: ldPruning.sh <vcffile> [optional: <LD threshold (R^2), default 0.1> <outputformat vcf/plink> <if 0/1 recoding requested, write 01>]"
         exit 1
 fi
 
 # Let the user know, that it is working on it
 echo "working..."
-module load plink/1.07
-module load openblas/0.2.13_par
-module load zlib/1.2.8
-module load vcftools/0.1.14
+
+# For running on the Euler cluster, load the required modules
+#module load plink/1.07
+#module load openblas/0.2.13_par
+#module load zlib/1.2.8
+#module load vcftools
 
 
 # Check which SNPs are in too high linkage and output a list of SNPs to be pruned out
-vcftools14 --${gz1}vcf ${file}.vcf${gz2} --plink --out ${file} 2> tmp
+vcftools --${gz1}vcf ${file}.vcf${gz2} --plink --out ${file} 2> tmp
 sed -i 's/^0\t/1\t/g' ${file}.map
 plink --file $file --indep-pairwise 50 10 $thresh --out $file --noweb --silent
 
@@ -119,9 +123,9 @@ sed -i 's/:/\t/g' ${file}.prune.in
 # Output pruned file either in vcf or plink format (if requested, 01 recoded) 
 if (( format == "vcf" ))
 then
-	vcftools14 --${gz1}vcf ${file}.vcf${gz2} --out $file.pruning --positions $file.prune.in --stdout --recode > $file.LDpruned.vcf
+	vcftools --${gz1}vcf ${file}.vcf${gz2} --out $file.pruning --positions $file.prune.in --stdout --recode > $file.LDpruned.vcf
 else 
-	vcftools14 --${gz1}vcf ${file}.vcf${gz2} --positions $file.prune.in --out $file.LDpruned --plink
+	vcftools --${gz1}vcf ${file}.vcf${gz2} --positions $file.prune.in --out $file.LDpruned --plink
 	if (( r == "01" ))
 	then
 		plink --file $file.LDpruned  --recode$r --out $file.LDpruned$r 
