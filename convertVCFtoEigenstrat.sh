@@ -22,12 +22,12 @@ then
  file=${1%.vcf}
 
  # Get a .map and .ped file
- vcftools15 --gzvcf $file".vcf.gz" \
+ vcftools --gzvcf $file".vcf.gz" \
          --plink --mac 1.0 \
          --out $file
 
 else
- vcftools15 --vcf $file".vcf" \
+ vcftools --vcf $file".vcf" \
          --plink --mac 1.0 \
          --out $file
 
