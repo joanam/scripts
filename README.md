@@ -31,7 +31,10 @@ Usage: vcf2phylip.py -i <input.vcf> -o <output.py> [optional: -r -f -e]
         if -f is specified, all sites not in the vcf file will be printed as missing (N)
         if -e is specified, indels are not printed (else replaced by N)
 
-If -f is specified, there will be no frameshifts if a site in the vcf file was filtered out due to low quality and also indels will be handled so that the positions and the length of the sequence is the same as the reference sequence length. This is very useful for data partitioning (e.g. specifying first, second and third codons) without having to adjust the positions because of sites lost during filtering steps or due to indels.
+If -f is specified, there will be no frameshifts if a site in the vcf file was filtered out due to low quality and 
+also indels will be handled so that the positions and the length of the sequence is the same as the reference sequence 
+length. This is very useful for data partitioning (e.g. specifying first, second and third codons) without having to 
+adjust the positions because of sites lost during filtering steps or due to indels.
 ```
 
 
@@ -54,14 +57,15 @@ usage: allelicBalance.py [-h] -i I -o O (-hom | -excl | -two) [-p P] [-p2 P2]
                          [-r R]
 
 optional arguments:
-         -h, --help           show this help message and exit
+           -h, --help           show this help message and exit
            -i I, --input I      input file in vcf format [required]
            -o O, --output O     output file [required]
            -hom, --homozygote   set failing genotypes as homozygous
            -excl, --exclude     set failing genotypes as missing
            -two, --twoSteps     set failing genotypes as missing if pvalue<p and as homozygous if pvalue<p2
            -p P, --pvalue P     p-value threshold for binomial test [default: 0.01]
-           -p2 P2, --pHomoz P2  second p-value threshold for binomial test if -two is specified, threshold to make failing genotypes homozygote [default=0.005]
+           -p2 P2, --pHomoz P2  second p-value threshold for binomial test if -two is specified, 
+                                threshold to make failing genotypes homozygote [default=0.005]
            -r R, --ratio R      hard cutoff for allelic ratio [default=0.2]
 ```
  
