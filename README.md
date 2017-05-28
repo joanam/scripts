@@ -46,18 +46,15 @@ usage: allelicBalance.py [-h] -i I -o O (-hom | -excl | -two) [-p P] [-p2 P2]
                          [-r R]
 
 optional arguments:
-  -h, --help           show this help message and exit
-  -i I, --input I      input file in vcf format [required]
-  -o O, --output O     output file [required]
-  -hom, --homozygote   set failing genotypes as homozygous
-  -excl, --exclude     set failing genotypes as missing
-  -two, --twoSteps     set failing genotypes as missing if pvalue<p and as
-                       homozygous if pvalue<p2
-  -p P, --pvalue P     p-value threshold for binomial test [default: 0.01]
-  -p2 P2, --pHomoz P2  second p-value threshold for binomial test if -two is
-                       specified, threshold to make failing genotypes
-                       homozygote [default=0.005]
-  -r R, --ratio R      hard cutoff for allelic ratio [default=0.2]
+         -h, --help           show this help message and exit
+           -i I, --input I      input file in vcf format [required]
+           -o O, --output O     output file [required]
+           -hom, --homozygote   set failing genotypes as homozygous
+           -excl, --exclude     set failing genotypes as missing
+           -two, --twoSteps     set failing genotypes as missing if pvalue<p and as homozygous if pvalue<p2
+           -p P, --pvalue P     p-value threshold for binomial test [default: 0.01]
+           -p2 P2, --pHomoz P2  second p-value threshold for binomial test if -two is specified, threshold to make failing genotypes homozygote [default=0.005]
+           -r R, --ratio R      hard cutoff for allelic ratio [default=0.2]
 
  
 
