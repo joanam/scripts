@@ -1,5 +1,5 @@
 # scripts
-Scripts to handle NGS data and other biological data
+Java, Python and Bash scripts to handle NGS data and other biological data
 
 # HaploABBABABA_multithreaded # Attention: I am working on a bug fix, please do not currently use this software
 Java program to calculate ABBA-BABA (D-statistics) to infer gene flow and the five-population test to infer the direction of gene flow. 
