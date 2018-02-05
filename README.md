@@ -1,16 +1,6 @@
 # scripts
 Java, Python and Bash scripts to handle NGS data and other biological data
 
-## HaploABBABABA_multithreaded # Attention: I am working on a bug fix, please do not currently use this software
-Java program to calculate ABBA-BABA (D-statistics) to infer gene flow and the five-population test to infer the direction of gene flow. 
-
-For more info, use: java -jar HaploABBABABA_multithreaded.jar -h
-```
-Usage: java -jar HaploABBABABA_multithreaded.jar \
-         -i <input.vcf> \
-         -p <populations file> -c <file with combinations to test> \
-         -o <output name> -t <n threads> -b <n bootstraps>
-```
 
 ## ldPruning.sh
 Bash script to prune SNPs in high linkage disequilibrium from a vcf file. This is important for all down-stream analyses that assume no linkage among SNPs, i.e. that require independent SNPs. 
@@ -26,10 +16,11 @@ Usage: ldPruning.sh <vcffile[.gz]> [optional: <LD threshold (R^2), default 0.1> 
 Python2 script to convert a vcf file to phylip format, e.g. for RAxML
 
 ```
-Usage: vcf2phylip.py -i <input.vcf> -o <output.py> [optional: -r -f -e]
+Usage: vcf2phylip.py -i <input.vcf> -o <output.py> [optional: -r -f -e -m]
         if -r is specified, the reference sequence will be included in the phylip file
         if -f is specified, all sites not in the vcf file will be printed as missing (N)
         if -e is specified, indels are not printed (else replaced by N)
+        if -m is specified, haploid genotypes as e.g. for mitochondrial DNA are expected (use e.g. when genotype calling was performed with a GATK tool and the option --sample_ploidy 1
 
 If -f is specified, there will be no frameshifts if a site in the vcf file was filtered out due to low quality and 
 also indels will be handled so that the positions and the length of the sequence is the same as the reference sequence 
@@ -46,7 +37,6 @@ Requires vcftools and converf
 ```
 Usage: convertVCFtoEigenstrat.sh <vcffile>
 ```
-
 
 
 ## allelicBalance.py
@@ -69,4 +59,14 @@ optional arguments:
            -r R, --ratio R      hard cutoff for allelic ratio [default=0.2]
 ```
  
+## HaploABBABABA_multithreaded # Attention: I am working on a bug fix, please do not currently use this software
+Java program to calculate ABBA-BABA (D-statistics) to infer gene flow and the five-population test to infer the direction of gene flow. 
+
+For more info, use: java -jar HaploABBABABA_multithreaded.jar -h
+```
+Usage: java -jar HaploABBABABA_multithreaded.jar \
+         -i <input.vcf> \
+         -p <populations file> -c <file with combinations to test> \
+         -o <output name> -t <n threads> -b <n bootstraps>
+```
 
