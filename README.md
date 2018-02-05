@@ -3,7 +3,7 @@ Java, Python and Bash scripts to handle NGS data and other biological data
 
 
 ## ldPruning.sh
-Bash script to prune SNPs in high linkage disequilibrium from a vcf file. This is important for all down-stream analyses that assume no linkage among SNPs, i.e. that require independent SNPs. 
+Bash script to prune SNPs in high linkage disequilibrium from a vcf file. This is important for all down-stream analyses that assume no linkage among SNPs, i.e. that require independent SNPs, e.g. STRUCTURE, PCA, treemix...
 
 Requires vcftools and plink
 
@@ -20,12 +20,14 @@ Usage: vcf2phylip.py -i <input.vcf> -o <output.py> [optional: -r -f -e -m]
         if -r is specified, the reference sequence will be included in the phylip file
         if -f is specified, all sites not in the vcf file will be printed as missing (N)
         if -e is specified, indels are not printed (else replaced by N)
-        if -m is specified, haploid genotypes as e.g. for mitochondrial DNA are expected (use e.g. when genotype calling was performed with a GATK tool and the option --sample_ploidy 1
+        if -m is specified, haploid genotypes as e.g. for mitochondrial DNA are expected 
+           (use e.g. when genotype calling was performed with a GATK tool and the option --sample_ploidy 1
 
-If -f is specified, there will be no frameshifts if a site in the vcf file was filtered out due to low quality and 
-also indels will be handled so that the positions and the length of the sequence is the same as the reference sequence 
-length. This is very useful for data partitioning (e.g. specifying first, second and third codons) without having to 
-adjust the positions because of sites lost during filtering steps or due to indels.
+If -f is specified, there will be no frameshifts if a site in the vcf file was filtered out due to low 
+quality and also indels will be handled so that the positions and the length of the sequence is the 
+same as the reference sequence length. This is very useful for data partitioning (e.g. specifying first, 
+second and third codons) without having to adjust the positions because of sites lost during filtering 
+steps or due to indels.
 ```
 
 
