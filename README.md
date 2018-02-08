@@ -70,18 +70,9 @@ Usage:  addRecombRates.r <vcffile> <linkage map>
 ```
 
 
-## makeRecombMap4fineSTRUCTURE.sh
-
-Bash script that makes the file with recombination rates in M/bp for all SNPs provided in the VCF file using the provided linkage map.
-
-```
-Usage:  makeRecombMap4fineSTRUCTURE.sh <vcffile> <linkage map>
-```
- 
-
 ## vcf2fineSTR.lsf
 
-Script that can be submitted to the Euler cluster (ETHZ) generating the fineSTRUCTURE input files from a vcf file and a linkage map. This script is not intended to be useful for people without Euler access but rather as an example of how one could generate a fineSTRUCTURE file from a vcf file using the makeRecombMap4fineSTRUCTURE.sh script to generate the recombination map.
+Script that can be submitted to the Euler cluster (ETHZ) generating the fineSTRUCTURE input files from a vcf file and a linkage map. This script is not intended to be useful for people without Euler access but rather as an example of how one could generate a fineSTRUCTURE file from a vcf file using vcftools and the makeRecombMap4fineSTRUCTURE.sh and convertIndsFineSTR.sh scripts.
 
 ```
 Usage:  addRecombRates.r <vcffile> <linkage map>
