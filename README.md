@@ -61,6 +61,15 @@ optional arguments:
            -r R, --ratio R      hard cutoff for allelic ratio [default=0.2]
 ```
  
+## makeRecombMap4fineSTRUCTURE.sh
+
+Bash script that makes the file with recombination rates in M/bp for all SNPs provided in the VCF file using the provided linkage map.
+
+```
+Usage:  makeRecombMap4fineSTRUCTURE.sh <vcffile> <linkage map>
+```
+ 
+ 
 ## HaploABBABABA_multithreaded # Attention: I am working on a bug fix, please do not currently use this software
 Java program to calculate ABBA-BABA (D-statistics) to infer gene flow and the five-population test to infer the direction of gene flow. 
 
