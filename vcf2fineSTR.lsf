@@ -1,0 +1,34 @@
+#!/bin/bash
+
+#BSUB -J "fineSTR[3-22]%10"
+#BSUB -R "rusage[mem=1000]"
+#BSUB -o log.%J.%I
+#BSUB -e err.%J.%I
+#BSUB -n 1
+#BSUB -W 24:00
+
+i=$LSB_JOBINDEX
+
+file=mattsSubset.minDP5.max35dp.maxHet1.54e-9.biallSNPs.Excl0.001p.excl0.2r.max0.25N.phased
+
+module load r
+
+# Extract the chromosome
+vcftools15 --vcf $file.vcf --chr chr$i --recode --stdout > $file.chr$i.vcf
+
+# Make the recombination file
+makeRecombMap4fineSTRUCTURE.sh $file.chr$i.vcf puncross.lifted.pruned.bed
+
+# Start the chr finestructure phase with the number of haploid inds, sites and the positions of the sites
+# first line=number of haploid inds, second line=number of sites, third line=P SNPs
+echo `grep "^#CH"  $file.chr$i.vcf | awk '{print (NF-9)*2}'` > $file.chr$i.fineSTRphase
+echo `grep -v "^#" $file.chr$i.vcf -c` >> $file.chr$i.fineSTRphase
+echo "P " | tr -d '\n' >>  $file.chr$i.fineSTRphase
+cut -d" " -f 1 $file.chr$i.recomb |  sed -e ':a;N;$!ba;s/\n/ /g' -e 's/start.pos //g' >> $file.chr$i.fineSTRphase
+
+# Add the genotype information for each individual:
+convertIndsFineSTR.sh 1 103 $file.chr$i 1
+
+# add the data to the chr finestructure phase file
+cat $file.chr$i.fineSTRphase.1 >> $file.chr$i.fineSTRphase
+rm $file.chr$i.fineSTRphase.1
