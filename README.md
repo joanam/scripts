@@ -61,6 +61,15 @@ optional arguments:
            -r R, --ratio R      hard cutoff for allelic ratio [default=0.2]
 ```
  
+
+## addRecombRates.r
+
+R script to generate a map in plink format, e.g. for phasing with BEAGLE. It requires a vcf file and a linkage map as input.
+```
+Usage:  addRecombRates.r <vcffile> <linkage map>
+```
+
+
 ## makeRecombMap4fineSTRUCTURE.sh
 
 Bash script that makes the file with recombination rates in M/bp for all SNPs provided in the VCF file using the provided linkage map.
@@ -69,6 +78,15 @@ Bash script that makes the file with recombination rates in M/bp for all SNPs pr
 Usage:  makeRecombMap4fineSTRUCTURE.sh <vcffile> <linkage map>
 ```
  
+
+## vcf2fineSTR.lsf
+
+Script that can be submitted to the Euler cluster (ETHZ) generating the fineSTRUCTURE input files from a vcf file and a linkage map. This script is not intended to be useful for people without Euler access but rather as an example of how one could generate a fineSTRUCTURE file from a vcf file using the makeRecombMap4fineSTRUCTURE.sh script to generate the recombination map.
+
+```
+Usage:  addRecombRates.r <vcffile> <linkage map>
+```
+
  
 ## HaploABBABABA_multithreaded # Attention: I am working on a bug fix, please do not currently use this software
 Java program to calculate ABBA-BABA (D-statistics) to infer gene flow and the five-population test to infer the direction of gene flow. 
