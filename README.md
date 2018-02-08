@@ -1,5 +1,5 @@
 # scripts
-Java, Python and Bash scripts to handle NGS data and other biological data
+Java, R, Python and Bash scripts to handle NGS data and other biological data
 
 
 ## ldPruning.sh
