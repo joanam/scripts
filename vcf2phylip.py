@@ -62,7 +62,7 @@ parser = argparse.ArgumentParser(description='Convert vcf file to phylip file fo
 
 parser.add_argument('-i', '--input', dest='i', help="input file in vcf(.gz) format [required]", required=True)
 parser.add_argument('-o', '--output', dest='o', help="output file [required]", required=True)
-parser.add_argument('-r', '--ref', action='store_true', help="if -f is specified, the reference sequence will be included in the phylip file)", default=False)
+parser.add_argument('-r', '--ref', action='store_true', help="if -r is specified, the reference sequence will be included in the phylip file)", default=False)
 parser.add_argument('-f', '--fill', action='store_true', help="if -f is specified, all sites not in the vcf file will be printed as missing (N)", default=False)
 parser.add_argument('-e', '--exclIndels', action='store_true', help="if -e is specified, indels are not printed (else replaced by N)", default=False)
 parser.add_argument('-m', '--mtDNA', action='store_true', help="if -m is specified, haploid genotype calls are expected in the vcf", default=False)
