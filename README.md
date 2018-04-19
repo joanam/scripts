@@ -13,10 +13,10 @@ Usage: ldPruning.sh <vcffile[.gz]> [optional: <LD threshold (R^2), default 0.1> 
 
 
 ## vcf2phylip.py
-Python2 script to convert a vcf file to phylip format, e.g. for RAxML
+Python2 script to convert a vcf(.gz) file to phylip format, e.g. for RAxML
 
 ```
-Usage: vcf2phylip.py -i <input.vcf> -o <output.py> [optional: -r -f -e -m]
+Usage: vcf2phylip.py -i <input.vcf(.gz)> -o <output.py> [optional: -r -f -e -m]
         if -r is specified, the reference sequence will be included in the phylip file
         if -f is specified, all sites not in the vcf file will be printed as missing (N)
         if -e is specified, indels are not printed (else replaced by N)
