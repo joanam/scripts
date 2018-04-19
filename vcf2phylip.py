@@ -4,12 +4,12 @@
 # by Joana, script to convert vcf to phylip
 # Some functions are recycled from the RAD python script written by Sam Wittwer
 
-import sys, getpass, re, argparse
+import sys, getpass, re, argparse, gzip
 
 # Define the neccessary functions:
 
 # Function to extract header info: extractHeaderInfo
-# takes a vcf file from line 1, goes through header, returns:
+# takes a vcf(.gz) file from line 1, goes through header, returns:
 # 0[string]             header
 # 1[list[string]]       individual IDs
 # 2[int]                number of individuals in vcf file
@@ -60,7 +60,7 @@ def writePhylipSequences(samplenames, sequences, outputdestination, writeref):
 # Parse the arguments provided
 parser = argparse.ArgumentParser(description='Convert vcf file to phylip file format')
 
-parser.add_argument('-i', '--input', dest='i', help="input file in vcf format [required]", required=True)
+parser.add_argument('-i', '--input', dest='i', help="input file in vcf(.gz) format [required]", required=True)
 parser.add_argument('-o', '--output', dest='o', help="output file [required]", required=True)
 parser.add_argument('-r', '--ref', action='store_true', help="if -f is specified, the reference sequence will be included in the phylip file)", default=False)
 parser.add_argument('-f', '--fill', action='store_true', help="if -f is specified, all sites not in the vcf file will be printed as missing (N)", default=False)
@@ -70,7 +70,10 @@ parser.add_argument('-m', '--mtDNA', action='store_true', help="if -m is specifi
 args = parser.parse_args()
 	
 # Set the default values:
-input = open(args.i,'r')
+if args.i.endswith('.gz'):
+	input = gzip.open(args.i,'r')
+else:
+	input = open(args.i,'r')
 output = open(args.o,'w')
 writeref = args.ref
 fill = args.fill	
