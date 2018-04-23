@@ -75,7 +75,7 @@ Usage:  addRecombRates.r <vcffile> <linkage map>
 Script that can be submitted to the Euler cluster (ETHZ) generating the fineSTRUCTURE input files from a vcf file and a linkage map. This script is not intended to be useful for people without Euler access but rather as an example of how one could generate a fineSTRUCTURE file from a vcf file using vcftools and the makeRecombMap4fineSTRUCTURE.sh and convertIndsFineSTR.sh scripts.
 
 ```
-Usage:  addRecombRates.r <vcffile> <linkage map>
+Usage:  bsub < vcf2fineSTR.lsf
 ```
 
  
