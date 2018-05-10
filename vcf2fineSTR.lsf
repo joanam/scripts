@@ -13,22 +13,25 @@ file=mattsSubset.minDP5.max35dp.maxHet1.54e-9.biallSNPs.Excl0.001p.excl0.2r.max0
 
 module load r
 
-# Extract the chromosome
-vcftools15 --vcf $file.vcf --chr chr$i --recode --stdout > $file.chr$i.vcf
+# Extract the chromosome (if not already done), if vcf is not gzipped, adjust this part
+vcftools15 --gzvcf $file.vcf.gz --chr chr$i --recode --stdout | gzip > $file.chr$i.vcf.gz
+file=$file.chr$i
 
 # Make the recombination file
-makeRecombMap4fineSTRUCTURE.sh $file.chr$i.vcf puncross.lifted.pruned.bed
+makeRecombMap4fineSTRUCTURE.sh $file.vcf.gz puncross.gapsEstimated.lifted.pruned.bed
 
 # Start the chr finestructure phase with the number of haploid inds, sites and the positions of the sites
 # first line=number of haploid inds, second line=number of sites, third line=P SNPs
-echo `grep "^#CH"  $file.chr$i.vcf | awk '{print (NF-9)*2}'` > $file.chr$i.fineSTRphase
-echo `grep -v "^#" $file.chr$i.vcf -c` >> $file.chr$i.fineSTRphase
-echo "P " | tr -d '\n' >>  $file.chr$i.fineSTRphase
-cut -d" " -f 1 $file.chr$i.recomb |  sed -e ':a;N;$!ba;s/\n/ /g' -e 's/start.pos //g' >> $file.chr$i.fineSTRphase
+hnind=`zgrep "^#CH"  $file.vcf.gz | awk '{print (NF-9)*2}'`
+echo $hnind > $file.fineSTRphase
+echo `zgrep -v "^#" $file.vcf.gz -c` >> $file.fineSTRphase
+echo "P " | tr -d '\n' >>  $file.fineSTRphase
+cut -d" " -f 1 $file.recomb |  sed -e ':a;N;$!ba;s/\n/ /g' -e 's/start.pos //g' >> $file.fineSTRphase
 
 # Add the genotype information for each individual:
-convertIndsFineSTR.sh 1 103 $file.chr$i 1
+dnind=`echo $hnind / 2 | bc`
+convertIndsFineSTR.sh 1 $dnind $file 1
 
 # add the data to the chr finestructure phase file
-cat $file.chr$i.fineSTRphase.1 >> $file.chr$i.fineSTRphase
-rm $file.chr$i.fineSTRphase.1
+cat $file.fineSTRphase.1 >> $file.fineSTRphase
+rm $file.fineSTRphase.1
