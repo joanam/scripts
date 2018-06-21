@@ -22,11 +22,17 @@ makeRecombMap4fineSTRUCTURE.sh $file.vcf.gz puncross.gapsEstimated.lifted.pruned
 
 # Start the chr finestructure phase with the number of haploid inds, sites and the positions of the sites
 # first line=number of haploid inds, second line=number of sites, third line=P SNPs
+
+# add number of individuals
 hnind=`zgrep "^#CH"  $file.vcf.gz | awk '{print (NF-9)*2}'`
 echo $hnind > $file.fineSTRphase
-echo `zgrep -v "^#" $file.vcf.gz -c` >> $file.fineSTRphase
+
+# add number of sites
+echo `grep -v "^#" <(zcat $file.vcf.gz) -c` >> $file.fineSTRphase
+
+# add sites
 echo "P " | tr -d '\n' >>  $file.fineSTRphase
-cut -d" " -f 1 $file.recomb |  sed -e ':a;N;$!ba;s/\n/ /g' -e 's/start.pos //g' >> $file.fineSTRphase
+cut -d" " -f 1 $file.recomb | sed -e ':a;N;$!ba;s/\n/ /g' -e 's/start.pos //g' >> $file.fineSTRphase
 
 # Add the genotype information for each individual:
 dnind=`echo $hnind / 2 | bc`
