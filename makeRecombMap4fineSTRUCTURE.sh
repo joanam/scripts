@@ -35,11 +35,11 @@ data<-as.data.frame(data)
 data$start.pos<-as.integer(as.character(data$start.pos))
 data$recom.rate.perbp<-as.double(data$recom.rate.perbp)
 
-# Read in the linkage map, i.e. table of physical vs recombination distance, teb-delimited
+# Read in the linkage map, i.e. table of physical vs recombination distance, tab-delimited
 recomb<-read.table(map,header=T,sep="\t")
 
 # For each chromosome separately, add the recombination distance
-# For unmapped scaffolds, use the empirical mean of 2M/Mb = 0.0002
+# For unmapped scaffolds, use the empirical mean of 2M/Mb = 2e-8 M/bp
 
 chrom<-mixedsort(levels(as.factor(data[,1])))
 add=0
@@ -53,15 +53,16 @@ for(i in 1:length(chrom)){
     dataChr<-data[data[,1]==chr,]
     n<-length(dataChr)
 
-    # Get physical position and the local recombination rate, if no info in linkage map use mean of 2 cM/Mb
+    # Get physical position and the local recombination rate, if no info in linkage map use mean of 2 cM/Mb = 2e-8 M/bp
     recChr<-recomb[recomb$CHROM==chr,]
     if(length(recChr$CHROM)>0){
      d<-smooth.spline(recChr$POS,recChr$cM,spar=0.7)
-     recRate<-stats:::predict.smooth.spline(d,as.integer(dataChr[,2]),deriv=1)$y*100
-     recRate[recRate<0]<-0.0000001
+     # predict the recombination rate for each position, divide by 100 to convert from cM to Morgan
+     recRate<-stats:::predict.smooth.spline(d,as.integer(dataChr[,2]),deriv=1)$y/100
+     recRate[recRate<0]<-0.000000000001
     }
     else{
-     recRate<-rep(0.00025,times=length(dataChr[,1]))
+     recRate<-rep(0.00000002,times=length(dataChr[,1]))
     }
     recRate[length(recRate)]<-(-9.00)
     data[data[,1]==chr,3]<-recRate
