@@ -78,6 +78,25 @@ Script that can be submitted to the Euler cluster (ETHZ) generating the fineSTRU
 Usage:  bsub < vcf2fineSTR.lsf
 ```
 
+## PhiX_removal.sh
+Bash script to remove PhiX (virus) reads from NGS data. This script generates a sam file with the aligned PhiX reads and a fastq file with all non-PhiX reads. This script may be useful to remove PhiX reads from RAD libraries.
+
+```
+Usage:  PhiX_removal < raw reads file > < output files prefix>
+```
+
+## demultiplexing.sh
+Bash script to demultiplex RAD reads with barcodes of different lengths. It uses process_radtags from Stacks. It also trimms the reads if the trimming length is shorter than the read length. This may make sense to remove read ends of bad sequencing quality and 
+to ensure that samples with different barcode lengths end up with the same demultiplexed read length. Note, the barcodes file needs to have one line per barcode giving the sample name and then tab-delimited the barcode.
+
+```
+Usage:  demultiplexing.sh <readsFastqFile> <barcodesFile> <outputFolder> <trimmingLength>
+```
+
+## runBowtie2RADID.sh
+This script is meant for RAD data mostly for the fish ecology and evolution group at EAWAG as it requires a naming scheme used by that group. However, it may also be useful to other users as a guide to setup a script that automatically aligns all fastq files in a directory.
+
+
  
 ## HaploABBABABA_multithreaded # Attention: I am working on a bug fix, please do not currently use this software
 Java program to calculate ABBA-BABA (D-statistics) to infer gene flow and the five-population test to infer the direction of gene flow. 
