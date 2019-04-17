@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # script that prunes SNPs with too high linkage 
-# requires vcftools
+# requires vcftools and plink
+# Uses plink to remove SNPs with r2>0.2 in a window of 50 kb sliding by 10 kb
 
 #@author: Joana Meier
 #@date: December, 2016
@@ -123,7 +124,7 @@ sed -i 's/:/\t/g' ${file}.prune.in
 # Output pruned file either in vcf or plink format (if requested, 01 recoded) 
 if (( format == "vcf" ))
 then
-	vcftools --${gz1}vcf ${file}.vcf${gz2} --out $file.pruning --positions $file.prune.in --stdout --recode > $file.LDpruned.vcf
+	vcftools --${gz1}vcf ${file}.vcf${gz2} --out $file.pruning --positions $file.prune.in --stdout --recode | gzip > $file.LDpruned.vcf.gz
 else 
 	vcftools --${gz1}vcf ${file}.vcf${gz2} --positions $file.prune.in --out $file.LDpruned --plink
 	if (( r == "01" ))
