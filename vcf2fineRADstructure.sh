@@ -16,6 +16,7 @@ file=$1
 file=${file%.gz}
 file=${file%.vcf}
 bamfilesFolder=$2
+bamfilesFolder=${bamfilesFolder%/}
 
 # Extract the RADtags present in at least 10 inds (positions of RAD sites from mapping report)
 currentDir=`pwd`
