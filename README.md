@@ -109,3 +109,16 @@ Usage: java -jar HaploABBABABA_multithreaded.jar \
          -o <output name> -t <n threads> -b <n bootstraps>
 ```
 
+## createRADmappingReport.sh
+Bash script that generates a mapping report of RAD data in bam files including for each individual the number of RAD loci sequenced, the mean sequencing depth, the RAD loci covered by at least 10 reads, and the mean sequencing depth of these RAD loci. It also generates a file with one line per RAD locus and individual giving the sequencing depth for each. The script needs to be run in the directory containing the bam files. The report can be used to test how good a RAD library is. If samples with few reads have few loci sequenced at high depth instead of many loci at low depth, this is strong indication for high duplication levels.
+
+```
+Usage: cd <directory of bam files>; createRADmappingReport.sh
+```
+
+## vcf2fineRADstructure.sh
+Bash script that converts a vcf file into the input format required for fineRADstructure (http://cichlid.gurdon.cam.ac.uk/fineRADstructure.html). It is rather slow as it uses vcftools to extract each RAD locus from the vcf file and then converts it to the correct format. It uses createRADmappingReport.sh to define the RAD loci. This script should be run with a phased vcf file as fineRADstructure needs haplotypes. For RAD data, I would use e.g. GATK ReadBackedPhasing (https://software.broadinstitute.org/gatk/documentation/tooldocs/3.8-0/org_broadinstitute_gatk_tools_walkers_phasing_ReadBackedPhasing.php).
+
+```
+Usage: vcf2fineRADstructure.sh <vcf file> <path to bam files>
+```
