@@ -43,6 +43,7 @@ then
   suff=".gz" # suffix
   vcfgz="gz" # for vcftools
 elif [ -s $file.vcf ]
+then
   nind=`grep ^#CH ${file}.vcf | awk '{print NF-9}'`
   suff="";vcfgz=""
 else
