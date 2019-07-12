@@ -21,8 +21,13 @@ bamfilesFolder=${bamfilesFolder%/}
 # Extract the RADtags present in at least 10 inds (positions of RAD sites from mapping report)
 currentDir=`pwd`
 
-# Go to the directory containing the bam files, run createMappingReport; come back
-cd $bamfilesFolder; createRADmappingReport.sh; cd $currentDir
+# If the mapping report does not exist yet in the directory containing the bam files, run createRADmappingReport
+if [ -s $bamfilesFolder/seq_depth_min10.txt ]
+then
+  echo "Mapping report exists already. I will not regenerate it."
+else
+  cd $bamfilesFolder; createMappingReport.sh; cd $currentDir
+fi
 
 # Extract RADloci with at least 10 individuals from seq_depth_min10.txt file
 cut -d" " -f 3,4 $bamfilesFolder/seq_depth_min10.txt | sort | uniq -c > RADpos.c
@@ -37,7 +42,7 @@ then
   nind=`zgrep ^#CH ${file}.vcf.gz | awk '{print NF-9}'`
   suff=".gz" # suffix
   vcfgz="gz" # for vcftools
-else if [ -s $file.vcf ]
+elif [ -s $file.vcf ]
   nind=`grep ^#CH ${file}.vcf | awk '{print NF-9}'`
   suff="";vcfgz=""
 else
