@@ -6,7 +6,7 @@
 
 # usage: vcf2fineRADstructure.sh <vcf file> <path to bam files>
 
-# This script requires the createMappingReport.sh script which requires the folder with the bam files
+# This script requires the createRADmappingReport.sh script which requires the folder with the bam files
 # It gets the RADloci present in at least 10 individuals with at least 10 reads each
 # It runs files of 1000 lines in parallel (increase number of lines if it uses too many CPU).
 
@@ -21,7 +21,7 @@ bamfilesFolder=$2
 currentDir=`pwd`
 
 # Go to the directory containing the bam files, run createMappingReport; come back
-cd $bamfilesFolder; createMappingReport.sh; cd $currentDir
+cd $bamfilesFolder; createRADmappingReport.sh; cd $currentDir
 
 # Extract RADloci with at least 10 individuals from seq_depth_min10.txt file
 cut -d" " -f 3,4 $bamfilesFolder/seq_depth_min10.txt | sort | uniq -c > RADpos.c
