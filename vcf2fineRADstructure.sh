@@ -2,6 +2,7 @@
 
 # Shell script to convert the vcf file to an input format for fineRADstructure
 # Written by Joana Meier, 2018
+# Sorry, this is a very slow script as it extracts each RAD locus from the vcf file with vcftools
 
 # usage: vcf2fineRADstructure.sh <vcf file> <path to bam files>
 
@@ -12,6 +13,7 @@
 
 # get the vcf file name (without suffix)
 file=$1
+file=${file%.gz}
 file=${file%.vcf}
 bamfilesFolder=$2
 
@@ -29,7 +31,18 @@ awk '{print $1" "$2-100" "$2"\n"$1" "$2" "$2+100}' RADpos.sorted | \
   grep -v "locus" > RADloci
 
 # Get the number of individuals
-nind=`grep ^#CH ${file}.vcf | awk '{print NF-9}'`
+if [ -s $file.vcf.gz ]
+then
+  nind=`zgrep ^#CH ${file}.vcf.gz | awk '{print NF-9}'`
+  suff=".gz" # suffix
+  vcfgz="gz" # for vcftools
+else if [ -s $file.vcf ]
+  nind=`grep ^#CH ${file}.vcf | awk '{print NF-9}'`
+  suff="";vcfgz=""
+else
+  echo -e "Error: file $file.vcf[.gz] not found!\nexiting..."
+  exit 1
+fi
 
 # Split the RADloci file into files of 10000 lines for parallelisation
 split -l 10000 RADloci RADloci.
@@ -43,7 +56,7 @@ function generateFile {
    a=$((a+1))
 
    # get the SNPs of the RADlocus
-   vcftools14 --vcf $file.vcf --chr `echo $i | cut -d" " -f1` --plink-tped \
+   vcftools --${vcfgz}vcf $file.vcf$suff --chr `echo $i | cut -d" " -f1` --plink-tped \
           --from-bp `echo $i | cut -d" " -f2` --to-bp `echo $i | cut -d" " -f3` \
           --out ${RADlocifile}.$a
 
