@@ -1,9 +1,9 @@
-# scripts
+# Scripts
 Java, R, Python and Bash scripts to handle NGS data and other biological data
 
-### Filtering scripts
+## Filtering scripts
 
-## ldPruning.sh
+### ldPruning.sh
 Bash script to prune SNPs in high linkage disequilibrium from a vcf file. This is important for all down-stream analyses that assume no linkage among SNPs, i.e. that require independent SNPs, e.g. STRUCTURE, PCA, treemix...
 
 Requires vcftools and plink
@@ -13,14 +13,14 @@ Usage:
 ldPruning.sh <vcffile[.gz]> [optional: <LD threshold (R^2), default 0.1> <outputformat vcf/plink> <if 0/1 recoding requested, write 01>]
 ```
 
-## PhiX_removal.sh
+### PhiX_removal.sh
 Bash script to remove PhiX (virus) reads from NGS data. This script generates a sam file with the aligned PhiX reads and a fastq file with all non-PhiX reads. This script may be useful to remove PhiX reads from RAD libraries.
 
 ```
 Usage:  PhiX_removal < raw reads file > < output files prefix>
 ```
 
-## allelicBalance.py
+### allelicBalance.py
 Python script that handles genotypes with strong allelic disbalance, i.e. heterozygote genotypes with one allele covered by most reads and another allele covered by much fewer reads. This is usually an indication of contamination but it can also be present if some reads are PCR duplicates. The user can specify if disbalanced heterozygote genotypes should be set as missing data or turned into homozygote genotypes of the allele with more reads.
 
 ```
