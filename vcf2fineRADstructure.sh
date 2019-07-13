@@ -116,11 +116,13 @@ nind=`grep -v INDV $file.imiss -c`
 awk -v prefix=$prefix '!/INDV/ {printf prefix$1"\t"}END{print ""}' $file.imiss >> ${file}_fineRADstructure
 
 # Add the RADloci data (only RADtags longer than $minSites)
+# Collapse the two haplotypes of an individual if they are identical
+# Remove both haplotypes if they contain missing data
 for RADlociFile in RADloci*file
 do
   cut -f 2-`echo ${nind}+2 | bc` $RADlociFile | \
-      awk -v minSites=$minSites '{split($2,cont,"[:]"); $1=""; $2=cont[1]; print $0}' | \
-        awk '{if(length($4)>minSites) {
+      awk '{split($2,cont,"[:]"); $1=""; $2=cont[1]; print $0}' | \
+        awk -v minSites=$minSites '{if(length($4)>=(minSites*2+1)) {
            for(i=2; i <= NF; i++){
                 split($i,genot,"/");
                 if(genot[1]==genot[2]) $i=genot[1]
