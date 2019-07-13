@@ -119,7 +119,7 @@ awk -v prefix=$prefix '!/INDV/ {printf prefix$1"\t"}END{print ""}' $file.imiss >
 for RADlociFile in RADloci*file
 do
   cut -f 2-`echo ${nind}+2 | bc` $RADlociFile | \
-      awk -v "minSites=$minSites" '{split($2,cont,"[:]"); $1=""; $2=cont[1]; print $0}' | \
+      awk -v minSites=$minSites '{split($2,cont,"[:]"); $1=""; $2=cont[1]; print $0}' | \
         awk '{if(length($4)>minSites) {
            for(i=2; i <= NF; i++){
                 split($i,genot,"/");
