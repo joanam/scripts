@@ -12,7 +12,10 @@
 
 # Define variables (modify as needed):
 prefix="X"  # fineRADstructure does not allow sample names to start with a number, if they do, add X here
-minSites=10 # minimum number of sites that a RADlocus needs to contain to be considered (if monomorphic sites are included, this number should be higher)
+minSites=10 # minimum number of sites that a RADlocus needs to contain to be considered 
+# (if monomorphic sites are included, this number should be higher)
+minInds=10 # minimum number of individuals that must be sequenced for each RAD locus to be considered
+
 
 # get the vcf file name (without suffix)
 file=$1
@@ -32,12 +35,16 @@ else
   cd $bamfilesFolder; createMappingReport.sh; cd $currentDir
 fi
 
-# Extract RADloci with at least 10 individuals from seq_depth_min10.txt file
+# Extract RADloci with at least minInds individuals from seq_depth_min10.txt file
 cut -d" " -f 3,4 $bamfilesFolder/seq_depth_min10.txt | sort | uniq -c > RADpos.c
-awk '{if($1>10) print $2,$3}' RADpos.c > RADpos
+awk -v minInds=$minInds '{if($1>minInds) print $2,$3}' RADpos.c > RADpos
 sort -V RADpos > RADpos.sorted
 awk '{print $1" "$2-100" "$2"\n"$1" "$2" "$2+100}' RADpos.sorted | \
   grep -v "locus" > RADloci
+  
+# Delete temporary files
+rm RADpos RADpos.c RADpos.sorted
+
 
 # Get the number of individuals
 if [ -s $file.vcf.gz ]
