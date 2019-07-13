@@ -10,6 +10,9 @@
 # It gets the RADloci present in at least 10 individuals with at least 10 reads each
 # It runs files of 1000 lines in parallel (increase number of lines if it uses too many CPU).
 
+# Define variables (modify as needed):
+prefix="X"  # fineRADstructure does not allow sample names to start with a number, if they do, add X here
+minSites=10 # minimum number of sites that a RADlocus needs to contain to be considered (if monomorphic sites are included, this number should be higher)
 
 # get the vcf file name (without suffix)
 file=$1
@@ -95,3 +98,26 @@ do
   generateFile $RADlocifile &
 done
 
+# Compute missing data for each individual (can later also be used to filter out bad individuals)
+vcftools --missing-indv --${vcfgz}vcf $file.vcf$suff --out $file
+
+# Get the number of individuals in the file:
+nind=`grep -v INDV $file.imiss -c`
+
+# Generate the final input file for fineRADstructure:
+# Note: If samples start with a number, add X to the beginning of each individual name by specifying prefix above
+awk -v prefix=$prefix '!/INDV/ {printf prefix$1"\t"}END{print ""}' $file.imiss >> ${file}_fineRADstructure
+
+# Add the RADloci data (only RADtags longer than $minSites)
+for RADlociFile in RADloci*file
+do
+  cut -f 2-`echo ${nind}+2 | bc` $RADlociFile | \
+      awk -v "minSites=$minSites" '{split($2,cont,"[:]"); $1=""; $2=cont[1]; print $0}' | \
+        awk '{if(length($4)>minSites) {
+           for(i=2; i <= NF; i++){
+                split($i,genot,"/");
+                if(genot[1]==genot[2]) $i=genot[1]
+                if($i~/0/) $i=""} print $0
+           }
+        }' | sed 's/ /\t/g'  >> ${file}_fineRADstructure
+done
