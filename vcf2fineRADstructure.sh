@@ -37,7 +37,7 @@ fi
 
 # Extract RADloci with at least minInds individuals from seq_depth_min10.txt file
 cut -d" " -f 3,4 $bamfilesFolder/seq_depth_min10.txt | sort | uniq -c > RADpos.c
-awk -v minInds=$minInds '{if($1>minInds) print $2,$3}' RADpos.c > RADpos
+awk -v minInds=$minInds '{if($1>=minInds) print $2,$3}' RADpos.c > RADpos
 sort -V RADpos > RADpos.sorted
 awk '{print $1" "$2-100" "$2"\n"$1" "$2" "$2+100}' RADpos.sorted | \
   grep -v "locus" > RADloci
