@@ -115,7 +115,7 @@ nind=`grep -v INDV $file.imiss -c`
 
 # Generate the final input file for fineRADstructure:
 # Note: If samples start with a number, add X to the beginning of each individual name by specifying prefix above
-awk -v prefix=$prefix '!/INDV/ {printf prefix$1"\t"}END{print ""}' $file.imiss > ${file}_fineRADstructure
+awk -v prefix=$prefix 'BEGIN{printf "Chr\t"} !/INDV/ {printf prefix$1"\t"}END{print ""}' $file.imiss > ${file}_fineRADstructure
 
 # Add the RADloci data (only RADtags longer than $minSites)
 # Collapse the two haplotypes of an individual if they are identical
