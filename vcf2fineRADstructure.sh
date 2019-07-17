@@ -132,3 +132,6 @@ do
            }
         }' | sed 's/ /\t/g'  >> ${file}_fineRADstructure
 done
+
+# Replace blanks by tabs (fineRADstructure prefers that)
+sed  -i 's/ /\t/g' ${file}_fineRADstructure
