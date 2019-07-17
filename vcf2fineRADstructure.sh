@@ -105,6 +105,8 @@ do
   generateFile $RADlocifile &
 done
 
+wait
+
 # Compute missing data for each individual (can later also be used to filter out bad individuals)
 vcftools --missing-indv --${vcfgz}vcf $file.vcf$suff --out $file
 
