@@ -199,7 +199,6 @@ join -a 1 -a 2 indInfoAdvSorted sorted_indInfoMin10reads.txt -1 1 -2 1 >> mappin
 
 
 # Remove files not needed anymore:
-rm indInfoAdvSorted indInfoAdv.txt sortedReport indInfoSorted sorted_indInfoMin10reads.txt contigs.txt \
-# rm	lociMin10reads.txt indInfoMin10reads.txt indInfo.txt report.txt  
+rm indInfoAdvSorted indInfoAdv.txt sortedReport indInfoSorted sorted_indInfoMin10reads.txt contigs.txt lociMin10reads.txt indInfoMin10reads.txt indInfo.txt report.txt  
 
 # rm seq_depth*
