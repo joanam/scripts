@@ -95,9 +95,9 @@ if noIndels and fill:
 headerinfo = extractHeaderInfo(input)	#skips header, retains IDs in headerinfo
 
 # Get the sample labels
-IDs = []	#IDs holds all sample names without equal spacing (used in nexus)
+IDs = []	#IDs holds all sample names without equal spacing 
 IDs.append("reference ")
-resultsequences = []	#resultsequences holds all complete sequences to be written to phylip or nexus file
+resultsequences = []	#resultsequences holds all complete sequences to be written
 resultsequences.append([])		#resultsequences[0] holds reference
 for entry in headerinfo[1]:
 	IDs.append(entry.replace("-",".")+" ")
@@ -121,7 +121,7 @@ for line in input:
                         resultsequences[individualcounter]+= "N" * addLine
                         individualcounter += 1
 		linecounter += addLine
-                resultsequences[0] += "N" * addLine
+                resultsequences[0] += "N" * addLine  # reference
 
 	# site contains a deletion, replace by missing data
 	if len(site[3])>1:
@@ -151,7 +151,7 @@ for line in input:
                                 resultsequences[individualcounter] += GetGenotype(individual[:3].split("/"), alternativeslist)
                         individualcounter += 1
 		linecounter += 1
-		resultsequences[0] += site[3]
+		resultsequences[0] += site[3]  # reference
 
 
 	# If the site is an indel and noIndels is not specified, print as missing data (else not printed)
@@ -160,13 +160,13 @@ for line in input:
                         resultsequences[individualcounter]+= "N"
                         individualcounter += 1
 		linecounter += 1
-		resultsequences[0] += site[3][:1]
+		resultsequences[0] += site[3][:1]  # reference
 
 	prev=int(site[1])
 
 input.close()
 	
-writePhylipSequences(samplenames, resultsequences, output, False)
+writePhylipSequences(samplenames, resultsequences, output, writeref)
 output.write("\n")
 output.close()
 
