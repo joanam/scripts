@@ -138,5 +138,5 @@ rm tmp
 
 # Output info about number of pruned SNPs to the console
 echo "finished, new file "$file.LDpruned$r" filtered for LD in 50 kb windows, shifting by 10 kb with LD threshold "$thresh
-echo `grep "After filtering" $file.pruning.log`
+echo `grep "After filtering" $file.log`
 
