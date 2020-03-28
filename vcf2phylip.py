@@ -141,17 +141,23 @@ for line in input:
 			alternativeslist.append(entry)
         individualcounter = 1
 
-
+	# If the site is not an indel, i.e. if it is a SNP or monomorphic site
 	if not indel:
-		for individual in site[9:]:
-                        elif haploid:
-                                indGeno = individual.split(":")
-                                resultsequences[individualcounter] += alternativeslist[int(indGeno[0])]
+                for individual in site[9:]:
+                        indGeno = individual.split(":")
+                        if haploid:
+                                if '.' in indGeno[0]:
+                                        resultsequences[individualcounter]+="N"
+                                else:
+                                        resultsequences[individualcounter] += alternativeslist[int(indGeno[0])]
                         else:
-                                resultsequences[individualcounter] += GetGenotype(individual[:3].split("/"), alternativeslist)
+                                if '.' in indGeno[0]:
+                                        resultsequences[individualcounter]+="N"
+                                else:
+                                        resultsequences[individualcounter] += GetGenotype(re.split('/|\|',indGeno[0]), alternativeslist)
                         individualcounter += 1
-		linecounter += 1
-		resultsequences[0] += site[3]  # reference
+                linecounter += 1
+                resultsequences[0] += site[3]
 
 
 	# If the site is an indel and noIndels is not specified, print as missing data (else not printed)
