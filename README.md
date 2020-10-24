@@ -1,7 +1,9 @@
 # Scripts
 Java, R, Python and Bash scripts to handle NGS data and other biological data
 
-Also check out other speciation genomics scripts here: https://github.com/speciationgenomics/scripts/
+Also check out other speciation genomics scripts (https://github.com/speciationgenomics/scripts/
+) of the online tutorial (https://speciationgenomics.github.io/)!
+
 
 ## Filtering scripts
 
@@ -23,7 +25,7 @@ Usage:  PhiX_removal < raw reads file > < output files prefix>
 ```
 
 ### allelicBalance.py
-Python script that handles genotypes with strong allelic disbalance, i.e. heterozygote genotypes with one allele covered by most reads and another allele covered by much fewer reads. This is usually an indication of contamination but it can also be present if some reads are PCR duplicates. The user can specify if disbalanced heterozygote genotypes should be set as missing data or turned into homozygote genotypes of the allele with more reads.
+Python 2 script that handles genotypes with strong allelic disbalance, i.e. heterozygote genotypes with one allele covered by most reads and another allele covered by much fewer reads. This is usually an indication of contamination but it can also be present if some reads are PCR duplicates. The user can specify if disbalanced heterozygote genotypes should be set as missing data or turned into homozygote genotypes of the allele with more reads.
 
 ```
 usage: allelicBalance.py [-h] -i I -o O (-hom | -excl | -two) [-p P] [-p2 P2]
@@ -42,7 +44,58 @@ optional arguments:
            -r R, --ratio R      hard cutoff for allelic ratio [default=0.2]
 ```
 
+### filter_vcf.py
+Python 2 script to filter vcf files
+```
+usage: filter_vcf.py [-h] -i I -o O [-q QUAL] [-p GQ] [-d DEPTH] [-n MININD]
+                     [-m MINALLELE] [-v] [-rindel] [-risnp] [-idist INDELDIST]
+                     [-rmono] [-rmsnp] [-rrsnp] [-np MININDPOP]
+                     [-e [E [E ...]]]
 
+Filter all sites in the given VCF file
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -i I, --input I       input file in vcf format [required]
+  -o O, --output O      output file [required]
+  -q QUAL, --QUAL QUAL  minimum quality of the SNP (QUAL field of vcf)
+                        [default 30]
+  -p GQ, --minGQ GQ     minimum quality for each single genotype (GQ of
+                        genotype) [default 30]
+  -d DEPTH, --readDepth DEPTH
+                        minimal read depth per single genotype (DP of
+                        genotype) [default 1]
+  -n MININD, --minInd MININD
+                        minimal number of individuals with gentoype per site
+                        [default 1]
+  -m MINALLELE, --minAllele MINALLELE
+                        minimum number of times an allele must be observed
+                        [default 1]
+  -v, --verbose         if -v is specified, progress info will be written to
+                        stdout (slows the program down)
+  -rindel, --removeIndels
+                        if -rindel is specified, indels will be filtered
+  -risnp, --removeIndelSNPs
+                        if -risnp is specified, SNPs around indels (distance
+                        specified by -idist) will be filtered
+  -idist INDELDIST, --indelDist INDELDIST
+                        SNPs at the given distance or smaller from indels will
+                        be filtered if -risnp given as additional argument
+                        [default 10]
+  -rmono, --removeMono  if -rmono is specified, monomorphic sites (except SNPs
+                        to the reference only) will be filtered
+  -rmsnp, --removeMultiallelicSNPs
+                        if -rmsnp is specified, multiallelic (>2 alleles) SNPs
+                        will be filtered
+  -rrsnp, --removeRefSNPs
+                        if -rrsnp is specified, SNPs to the reference only
+                        (=monomorphic within sample) will be filtered
+  -np MININDPOP, --minIndPop MININDPOP
+                        minimum number of individuals per population-code
+  -e [E [E ...]], --exclude [E [E ...]]
+                        exclude popcodes containing the following string(s)
+                        from minIndPop-filtering
+```
 
 ## File conversion scripts
 
