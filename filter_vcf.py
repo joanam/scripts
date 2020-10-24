@@ -1,28 +1,6 @@
 #! /usr/bin/env python
 
-# Authors: Sam, David, Joana, Irene
-# Mar-05-2012: Sam wrote a python script "sharedNind.py" that filters all RAD loci by minimum number of individuals covered
-# Apr-19-2013: David created a new version filtering the VCF file by site and not by RAD locus
-# May-21-2013: Joana added options -n (minInd) -m (minAllele, adapted from a script by Irene) and -v (verbose)
-# June-3-2013: Joana added option -ri (remove indels) and incorporated counters for sources of site removal
-#              note: SNPs are only removed near indels that passed the other quality filters (e.g. minInd and minAllele)
-# June-26-2013: David removed a bug, which caused all fixed differences from the reference to be filtered and  modified 
-#              the -m option such that all present alleles must have at least -m reads and not only two of the alleles present
-# July-16-2013: David re-structured and commented the program, removed a few bugs (last ~11 lines were not printed in
-#              indel-associated SNP filter mode, some loci around indels were not sorted), added functionality to remove
-#              indels and indel-associated SNPs separately, improved verbose-mode output and bug-fixed the statistics
-# July-26-2013: David implemented to filter out monomorphic sites (-rmono) and SNPs to the reference only (=monomorphic 
-#              within sample, -rrsnp) and bugfixed and improved the verbose output.
-# July-27-2013: David implemented to filter min. number of individuals per population-code (formerly in MissingData.py by Irene).
-# Aug-30-2013: Joana adapted the script to allow for uncalled genotypes in the format './.:.:.' which is produced by Unified Genotyper
-# Sept-10-2013: David implemented a filter against multi-allelic SNPs (>2 alleles), bug-fix of population-based filtering
-# Oct-21-2013: David fixed a bug in the output statistics & made the -np 1 option possible.
-# Aug-28-2014: Bug removed for -np option without exclusion (-e) tag. Did not work for first species before.
-# Sept-25-2014: Adaptation to non-variant sites coming from GATK-HaplotypeCaller - these don't have a QUAL value, but instead a "."
-# Sept-25-2014: Adaptation to bug, when instead of genotype "0/0" without further information is called -> puts empty genotype "./."
-# Sept-29-2014: Adaptation to bug, when "0/0" without reads is called in SNP site, where all 5 tags are provided, but DP is "."
-# Oct-14-2014: Bug-fix of the change introduced in Sept-25-2014
-# Nov-10-2014: Option -np is now available for use on gdcsrv1 and gdcws1, dependency from statsmodels.tools library removed (David)
+# Authors: Samuel Wittwer, Joana Meier, David Marques, Irene Keller
 
 from sys import *
 import os, time, argparse, re, numpy
