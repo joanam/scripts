@@ -1,6 +1,8 @@
 # Scripts
 Java, R, Python and Bash scripts to handle NGS data and other biological data
 
+Also check out other speciation genomics scripts here: https://github.com/speciationgenomics/scripts/
+
 ## Filtering scripts
 
 ### ldPruning.sh
