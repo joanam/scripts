@@ -34,18 +34,18 @@ for Line in inputF:
     # DATA SECTION: clause checks if the header section is over
     if re.match('^#',Line) is None:
 
-	# Get the columns of that line
+        # Get the columns of that line
         columns=Line.strip("\n").split("\t")
 
-	# Only check SNPs
+        # Only check SNPs (monomorphic sites are not modified)
         if columns[5]!=".":
-	    # Add the info to the site
+            # Add the info to the site
             result=columns[0:9]
 
-	    # Get the genotypes
+            # Get the genotypes
             genotypecolumns=range(9,len(columns))
 
-	    # Check each individual if it is a heterozygote
+            # Check each individual if it is a heterozygote
             for ind in genotypecolumns:
                 genotype=columns[ind]
                 genotype=genotype.split(":")
@@ -54,66 +54,66 @@ for Line in inputF:
                     alleles=genotype[0].split("/") 
                 elif "|" in genotype[0]:
                     alleles=genotype[0].split("|") 
-		else:
-                    print "Error: Please provide a vcf file of diploid individuals"
-                    quit()		
+                else:
+                    result.append(":".join(genotype))       
 
-		# If the genotype is heterozygous check the allelic balance
-	        if alleles[0]!=alleles[1]:
-		    reads=genotype[1].split(",")
+                # If the genotype is heterozygous check the allelic balance
+                if alleles[0]!=alleles[1]:
+                    reads=genotype[1].split(",")
 
                     # Calculate the probability for the observed allele distribution with a binomial test
                     pval=scipy.stats.binom_test(reads[0], n=int(reads[0])+int(reads[1]), p=0.5)
 
-		    # if one of the alleles has no reads (weirdly this happens)
-		    if int(reads[0])==0 or int(reads[1])==0:
+                    # if one of the alleles has no reads (weirdly this happens)
+                    if int(reads[0])==0 or int(reads[1])==0:
                         result.append("./.")
 
-		    # If significant allelic disbalance
-		    elif pval<threshold:
+                    # If significant allelic disbalance
+                    elif pval<threshold:
 
-			# If -excl is specified, set failing genotypes as missing
-			if args.exclude:
-			    result.append("./.")
+                        # If -excl is specified, set failing genotypes as missing
+                        if args.exclude:
+                            result.append("./.")
 
-		    	# if -hom is specified, set failing genotypes as homozygous
-		    	elif args.homozygote:
-			    # Replace the genotype by the more common allele homozygote
-			    if reads[0]>reads[1]:
-				genotype[0]=alleles[0]+"/"+alleles[0]
-			    else:
-				genotype[0]=alleles[1]+"/"+alleles[1]
+                        # if -hom is specified, set failing genotypes as homozygous
+                        elif args.homozygote:
+                        
+                            # Replace the genotype by the more common allele homozygote
+                            if reads[0]>reads[1]:
+                                genotype[0]=alleles[0]+"/"+alleles[0]
+                            else:
+                                genotype[0]=alleles[1]+"/"+alleles[1]
 
-			    result.append(":".join(genotype))
+                            result.append(":".join(genotype))
 
-		    	# if -two is specified, set genotypes failing threshold as missing, and those failing threshold2 as homozygous
-		    	elif args.twoSteps:
+                        # if -two is specified, set genotypes failing threshold as missing, and those failing threshold2 as homozygous
+                        elif args.twoSteps:
                             if pval>threshold2:
-				result.append("./.")
-			    else:
-				if reads[0]>reads[1]:
-                                	genotype[0]=alleles[0]+"/"+alleles[0]
-                            	else:
-                                	genotype[0]=alleles[1]+"/"+alleles[1]
-			else: 
+                                result.append("./.")
+                            else:
+                                if reads[0]>reads[1]:
+                                        genotype[0]=alleles[0]+"/"+alleles[0]
+                                else:
+                                        genotype[0]=alleles[1]+"/"+alleles[1]
+                        else: 
                             exit("either -hom or -excl or -two is required, please specify how failing genotypes should be handled")
 
-		    # If the binomial test is not significant but the allic ratio very small (at low depth possible) 
+                    # If the binomial test is not significant but the allic ratio very small (at low depth possible) 
                     elif float(reads[0])/float(reads[1])<ratio or float(reads[1])/float(reads[0])<ratio:
                         result.append("./.")
 
 
-		    # If the genotype makes the test
-		    else:
+                    # If the genotype makes the test
+                    else:
                         result.append(":".join(genotype))
 
-		# If the genotype is homozygous, just append as is
-		else:
+                # If the genotype is homozygous, just append as is
+                else:
                     result.append(":".join(genotype))
 
             outputF.write('\t'.join(result)+"\n")
 
-	# If it is not a SNP just write the line out
+        # If it is not a SNP (monomorphic) just write the line out
         else:
             outputF.write(Line)
 
@@ -125,7 +125,3 @@ for Line in inputF:
 
 inputF.close()
 outputF.close()
-
-
-
-
