@@ -51,9 +51,12 @@ for Line in inputF:
                 genotype=genotype.split(":")
 
                 if "/" in genotype[0]:
-                    alleles=genotype[0].split("/") # counts the occurrences of each allele (up to 3 alt alleles -> LIMITATION)
+                    alleles=genotype[0].split("/") 
                 elif "|" in genotype[0]:
-                    alleles=genotype[0].split("|") # counts the occurrences of each allele (up to 3 alt alleles -> LIMITATION)
+                    alleles=genotype[0].split("|") 
+		else:
+                    print "Error: Please provide a vcf file of diploid individuals"
+                    quit()		
 
 		# If the genotype is heterozygous check the allelic balance
 	        if alleles[0]!=alleles[1]:
