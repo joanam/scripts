@@ -55,7 +55,8 @@ for Line in inputF:
                 elif "|" in genotype[0]:
                     alleles=genotype[0].split("|") 
                 else:
-                    result.append(":".join(genotype))       
+                    result.append(":".join(genotype))
+                    continue
 
                 # If the genotype is heterozygous check the allelic balance
                 if alleles[0]!=alleles[1]:
