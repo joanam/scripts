@@ -6,6 +6,7 @@ from sys import *
 import os, time, argparse, re, scipy, numpy
 from collections import defaultdict
 from scipy import stats
+import gzip
 
 parser = argparse.ArgumentParser(description='Filter out genotypes with strong allic disbalance in the given VCF file')
 
@@ -26,8 +27,22 @@ threshold=args.p
 threshold2=args.p2
 ratio=args.r
 
-inputF=open(args.i,'r')
-outputF=open(args.o, 'w')
+# Check if the input file is gzipped
+def is_gz_file(inputF):
+    with open(inputF, 'rb') as test_f:
+        return test_f.read(2) == b'\x1f\x8b'
+
+# Read in the input file
+if is_gz_file(args.i):
+    inputF=gzip.open(args.i,'r')
+else:
+    inputF=open(args.i,'r')
+
+# Prepare the output file (if filename ends with gz, create gzipped file)
+if args.o.endswith(".gz"):
+    outputF=gzip.open(args.o, 'w')
+else:
+    outputF=open(args.o, 'w')
 
 
 for Line in inputF:
