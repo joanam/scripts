@@ -47,6 +47,7 @@ for Line in inputF:
         else:
             outputF.write(Line)
             print("Warning no AD field found at ",columns[0]," ",columns[1]," and thus no allelic balance filter applied at this site")
+            continue
 
         # Only check SNPs (monomorphic sites are not modified)
         if columns[5]!=".":
