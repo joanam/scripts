@@ -36,6 +36,12 @@ for Line in inputF:
 
         # Get the columns of that line
         columns=Line.strip("\n").split("\t")
+        
+        # Get the format field
+        format=columns[8].split(":")
+
+        # Get the AD column number
+        AD=format.index("AD")
 
         # Only check SNPs (monomorphic sites are not modified)
         if columns[5]!=".":
@@ -60,7 +66,7 @@ for Line in inputF:
 
                 # If the genotype is heterozygous check the allelic balance
                 if alleles[0]!=alleles[1]:
-                    reads=genotype[1].split(",")
+                    reads=genotype[AD].split(",")
 
                     # Calculate the probability for the observed allele distribution with a binomial test
                     pval=scipy.stats.binom_test(reads[0], n=int(reads[0])+int(reads[1]), p=0.5)
