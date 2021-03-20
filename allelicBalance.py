@@ -40,8 +40,13 @@ for Line in inputF:
         # Get the format field
         format=columns[8].split(":")
 
-        # Get the AD column number
-        AD=format.index("AD")
+        # Check if the required AD field is found (reads for each allele)
+        if("AD" in format):
+            # Get the AD column number
+            AD=format.index("AD")
+        else:
+            outputF.write(Line)
+            print("Warning no AD field found at ",columns[0]," ",columns[1]," and thus no allelic balance filter applied at this site")
 
         # Only check SNPs (monomorphic sites are not modified)
         if columns[5]!=".":
