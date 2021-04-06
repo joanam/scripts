@@ -28,19 +28,16 @@ threshold2=args.p2
 ratio=args.r
 
 # Check if the input file is gzipped
-def is_gz_file(inputF):
-    with open(inputF, 'rb') as test_f:
-        return test_f.read(2) == b'\x1f\x8b'
-
-# Read in the input file
-if is_gz_file(args.i):
-    inputF=gzip.open(args.i,'r')
+if args.i.endswith(".gz"):
+    inputF=gzip.open(args.i,'rt')
+    print("Assuming the input file is gzipped")
 else:
     inputF=open(args.i,'r')
 
 # Prepare the output file (if filename ends with gz, create gzipped file)
 if args.o.endswith(".gz"):
-    outputF=gzip.open(args.o, 'w')
+    outputF=gzip.open(args.o, 'wt')
+    print("Generating a gzipped output file")
 else:
     outputF=open(args.o, 'w')
 
@@ -149,7 +146,7 @@ for Line in inputF:
     else:
         outputF.write(Line)
 
-
+print("\nAll done")
 
 inputF.close()
 outputF.close()
