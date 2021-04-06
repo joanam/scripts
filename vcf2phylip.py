@@ -39,8 +39,8 @@ def fillUp(list, fill = " "):           # Checks length of entries in a list, fi
                         returnlist.append(entry)
         return returnlist
 
-	
-# Function to write the the lines in phylip format	
+        
+# Function to write the the lines in phylip format        
 def writePhylipSequences(samplenames, sequences, outputdestination, writeref):
         if writeref:
                 beginning = 0
@@ -55,7 +55,7 @@ def writePhylipSequences(samplenames, sequences, outputdestination, writeref):
                 outstring += samplenames[i]+"".join(sequences[i])
                 outstring +="\n"
         outputdestination.write(outstring.strip("\n"))
-	
+        
 
 # Parse the arguments provided
 parser = argparse.ArgumentParser(description='Convert vcf file to phylip file format')
@@ -68,15 +68,15 @@ parser.add_argument('-e', '--exclIndels', action='store_true', help="if -e is sp
 parser.add_argument('-m', '--mtDNA', action='store_true', help="if -m is specified, haploid genotype calls are expected in the vcf", default=False)
 
 args = parser.parse_args()
-	
+        
 # Set the default values:
 if args.i.endswith('.gz'):
-	input = gzip.open(args.i,'rt')
+        input = gzip.open(args.i,'rt')
 else:
-	input = open(args.i,'r')
+        input = open(args.i,'r')
 output = open(args.o,'w')
 writeref = args.ref
-fill = args.fill	
+fill = args.fill        
 noIndels = args.exclIndels
 haploid = args.mtDNA
 prev=100000000000000000000000000000000000
@@ -88,22 +88,22 @@ GetGenotype = lambda individual, altlist: AmbiguityMatrix[CoordinatesDictionary[
 
 # If -f and -e are specified 
 if noIndels and fill:
-	print("-f and -e are incompatible! Please decide if you want all sites or not")
-	sys.exit(2)
+        print("-f and -e are incompatible! Please decide if you want all sites or not")
+        sys.exit(2)
 
 # Get the header info
-headerinfo = extractHeaderInfo(input)	#skips header, retains IDs in headerinfo
+headerinfo = extractHeaderInfo(input)        #skips header, retains IDs in headerinfo
 
 # Get the sample labels
-IDs = []	#IDs holds all sample names without equal spacing 
+IDs = []        #IDs holds all sample names without equal spacing 
 IDs.append("reference ")
-resultsequences = []	#resultsequences holds all complete sequences to be written
-resultsequences.append([])		#resultsequences[0] holds reference
+resultsequences = []        #resultsequences holds all complete sequences to be written
+resultsequences.append([])                #resultsequences[0] holds reference
 for entry in headerinfo[1]:
-	IDs.append(entry.replace("-",".")+" ")
-	resultsequences.append([])
+        IDs.append(entry.replace("-",".")+" ")
+        resultsequences.append([])
 samplenames = fillUp(IDs)
-	
+        
 linecounter = 0
 print("\ngenerating phylip file with ",len(samplenames)-1," individuals")
 
@@ -111,38 +111,38 @@ print("\ngenerating phylip file with ",len(samplenames)-1," individuals")
 for line in input:
         site = line.strip('\n').split('\t')
         indel = False
-	pos = int(site[1])
-	
-	# If missing positions should be filled up with Ns (-f specified, e.g. sites of low quality that were filtered out)
-	if pos > (prev + 1) and fill:
-		addLine=pos-(prev+1)
+        pos = int(site[1])
+        
+        # If missing positions should be filled up with Ns (-f specified, e.g. sites of low quality that were filtered out)
+        if pos > (prev + 1) and fill:
+                addLine=pos-(prev+1)
                 individualcounter = 1
                 for individual in site[9:]:
                         resultsequences[individualcounter]+= "N" * addLine
                         individualcounter += 1
-		linecounter += addLine
+                linecounter += addLine
                 resultsequences[0] += "N" * addLine  # reference
 
-	# site contains a deletion, replace by missing data
-	if len(site[3])>1:
-		indel=True
+        # site contains a deletion, replace by missing data
+        if len(site[3])>1:
+                indel=True
 
-	else:
-		alleles = site[4].split(",")  # if there are more than 1 alternative alleles, they are separated by commas
-       	        for alt in alleles:
-                	if len(alt)>1 or '*' in alt:  # in case of an insertion
-				indel=True
-				break
+        else:
+                alleles = site[4].split(",")  # if there are more than 1 alternative alleles, they are separated by commas
+                for alt in alleles:
+                        if len(alt)>1 or '*' in alt:  # in case of an insertion
+                                indel=True
+                                break
 
-	alternativeslist = []
-	alternativeslist.append(site[3])
-	if site[4] != ".":
-		for entry in site[4].split(","):
-			alternativeslist.append(entry)
+        alternativeslist = []
+        alternativeslist.append(site[3])
+        if site[4] != ".":
+                for entry in site[4].split(","):
+                        alternativeslist.append(entry)
         individualcounter = 1
 
-	# If the site is not an indel, i.e. if it is a SNP or monomorphic site
-	if not indel:
+        # If the site is not an indel, i.e. if it is a SNP or monomorphic site
+        if not indel:
                 for individual in site[9:]:
                         indGeno = individual.split(":")
                         if haploid:
@@ -160,21 +160,20 @@ for line in input:
                 resultsequences[0] += site[3]
 
 
-	# If the site is an indel and noIndels is not specified, print as missing data (else not printed)
-	elif not noIndels:
-		for individual in site[9:]:
+        # If the site is an indel and noIndels is not specified, print as missing data (else not printed)
+        elif not noIndels:
+                for individual in site[9:]:
                         resultsequences[individualcounter]+= "N"
                         individualcounter += 1
-		linecounter += 1
-		resultsequences[0] += site[3][:1]  # reference
+                linecounter += 1
+                resultsequences[0] += site[3][:1]  # reference
 
-	prev=int(site[1])
+        prev=int(site[1])
 
 input.close()
-	
+        
 writePhylipSequences(samplenames, resultsequences, output, writeref)
 output.write("\n")
 output.close()
-
 
 
