@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-# python version 2.7.2+
+# python version 3
 # by Joana, script to convert vcf to phylip
 # Some functions are recycled from the RAD python script written by Sam Wittwer
 
@@ -71,7 +71,7 @@ args = parser.parse_args()
 	
 # Set the default values:
 if args.i.endswith('.gz'):
-	input = gzip.open(args.i,'r')
+	input = gzip.open(args.i,'rt')
 else:
 	input = open(args.i,'r')
 output = open(args.o,'w')
@@ -88,7 +88,7 @@ GetGenotype = lambda individual, altlist: AmbiguityMatrix[CoordinatesDictionary[
 
 # If -f and -e are specified 
 if noIndels and fill:
-	print "-f and -e are incompatible! Please decide if you want all sites or not"
+	print("-f and -e are incompatible! Please decide if you want all sites or not")
 	sys.exit(2)
 
 # Get the header info
@@ -105,7 +105,7 @@ for entry in headerinfo[1]:
 samplenames = fillUp(IDs)
 	
 linecounter = 0
-print "\ngenerating phylip file with ",len(samplenames)-1," individuals"
+print("\ngenerating phylip file with ",len(samplenames)-1," individuals")
 
 # Go through the lines to get the genotypes
 for line in input:
