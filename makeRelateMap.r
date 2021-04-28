@@ -2,6 +2,7 @@
 
 # Written by Joana Meier, Oct 2019
 # usage: makeRelateMap.r <vcffile> <linkage map>
+# The linkage map needs to be tab-delimited and contain the following three columns (additional columns are no problem): CHROM, POS, cM
 # Generates a map file with the position, recomb rate, cM position as required by Relate
 
 # Load the required packages
