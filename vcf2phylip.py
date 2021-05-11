@@ -51,7 +51,7 @@ def writePhylipSequences(samplenames, sequences, outputdestination, writeref):
         nbases = str(len(sequences[0]))
         outputdestination.write(nsamples +"\t"+nbases+"\n")
         outstring = ""
-        for i in xrange(beginning, len(samplenames)):
+        for i in range(beginning, len(samplenames)):
                 outstring += samplenames[i]+"".join(sequences[i])
                 outstring +="\n"
         outputdestination.write(outstring.strip("\n"))
