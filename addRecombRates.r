@@ -21,7 +21,7 @@ if(grepl(file,pattern=".gz")) file=paste("gunzip -c ",file,sep="")
 data<-fread(file,header=T,skip="#CHR",select=c(1:5),data.table=F)
 
 # Extract the first five columns with position information and add a column for recombination distances
-data<-cbind(data,"cM"=vector(length = length(data[,1])),"rec"=vector(length = length(data[,1])))
+data<-cbind(data,"Morgan"=vector(length = length(data[,1])))
 
 # Read in the table of physical vs recombination distance
 recomb<-read.table(map,header=T,sep="\t")
@@ -54,10 +54,10 @@ for(i in length(chrom)){
     else{
      recPos<-dataChr$POS/0.5e6
     }
-    data[data[,1]==chr,length(names(data))]<-recPos
+    data[data[,1]==chr,"Morgan"]<-recPos/100
 }
 
-toPrint<-cbind(data[,1],paste(data[,1],data[,2],sep=":"),data[,length(names(data))],data[,2])
+toPrint<-cbind(data[,1],paste(data[,1],data[,2],sep=":"),data[,"Morgan"],data[,2])
 
 write.table(toPrint,paste(prefix,".plink.map",sep=""),row.names=F,quote=F,sep=" ",col.names=F)
 
