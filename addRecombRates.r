@@ -31,7 +31,7 @@ recomb<-read.table(map,header=T,sep="\t")
 
 chrom<-mixedsort(levels(as.factor(data[,1])))
 
-for(i in length(chrom)){
+for(i in 1:length(chrom)){
 
     # get the name of the ith chromosome/scaffold
     chr=chrom[i]
