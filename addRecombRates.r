@@ -18,7 +18,7 @@ prefix<-sub('\\.vcf.*', '', file)
 if(grepl(file,pattern=".gz")) file=paste("gunzip -c ",file,sep="")
 
 # Read in the data (just the first 5 columns)
-data<-fread(file,header=T,skip="#CHR",select=c(1:5),data.table=F)
+data<-fread(cmd=file,header=T,skip="#CHR",select=c(1:5),data.table=F)
 
 # Extract the first five columns with position information and add a column for recombination distances
 data<-cbind(data,"Morgan"=vector(length = length(data[,1])))
