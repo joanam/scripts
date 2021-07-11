@@ -19,7 +19,7 @@ renameScaff="FALSE"
 if [[ $1 == "-h" ]]
 then
  echo "Please provide the vcf file to parse, and optionally add --renameScaff if you have scaffolds instead of chromosomes"
- echo "Usage: convertVCFtoEigenstrat.sh <vcf file> --renameScaff --rec 2 (note, the second argument is optional)"
+ echo "Usage: convertVCFtoEigenstrat.sh <vcf file> --renameScaff (note, the second argument is optional)"
  exit 1
 
 # If the second argument renameScaff is given, set it to True
