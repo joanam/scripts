@@ -104,7 +104,7 @@ for Line in inputF:
                         elif args.homozygote:
                         
                             # Replace the genotype by the more common allele homozygote
-                            if reads[0]>reads[1]:
+                            if int(reads[0])> Int(reads[1]):
                                 genotype[0]=alleles[0]+"/"+alleles[0]
                             else:
                                 genotype[0]=alleles[1]+"/"+alleles[1]
@@ -116,10 +116,11 @@ for Line in inputF:
                             if pval>threshold2:
                                 result.append("./.")
                             else:
-                                if reads[0]>reads[1]:
+                                if int(reads[0])> Int(reads[1]):
                                         genotype[0]=alleles[0]+"/"+alleles[0]
                                 else:
                                         genotype[0]=alleles[1]+"/"+alleles[1]
+                            result.append(":".join(genotype))
                         else: 
                             exit("either -hom or -excl or -two is required, please specify how failing genotypes should be handled")
 
