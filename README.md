@@ -142,6 +142,11 @@ R script to generate a map in plink format, e.g. for phasing with BEAGLE. It req
 Usage:  addRecombRates.r <vcffile> <linkage map>
 ```
 
+If you do not have a linkage map, you can use this script to generate uniform recombination maps:
+### createuniformrecmap.r 
+```
+Usage:  createuniformrecmap.r <vcffile> <mean recombination rate in cM/Mbp, default 2 cM/Mbp>
+```
 
 ### vcf2fineRADstructure.sh
 Bash script that converts a vcf(.gz) file into the input format required for fineRADstructure (http://cichlid.gurdon.cam.ac.uk/fineRADstructure.html). It is rather slow as it uses vcftools to extract each RAD locus from the vcf file and then converts it to the correct format. It is best to only use it on vcf files including only SNPs as monomorphic sites and indels are anyways not used by fineRADstructure. This script uses createRADmappingReport.sh to define the RAD loci. This script should be run with a phased vcf file as fineRADstructure needs haplotypes. For RAD data, I would use e.g. GATK ReadBackedPhasing (https://software.broadinstitute.org/gatk/documentation/tooldocs/3.8-0/org_broadinstitute_gatk_tools_walkers_phasing_ReadBackedPhasing.php).
